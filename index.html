@@ -135,7 +135,7 @@
   <section class="section quiz" id="quiz" aria-labelledby="quiz-title">
     <p class="eyebrow">12 questions · mixed practice</p>
     <h2 id="quiz-title">Practice quiz</h2>
-    <p class="section-intro">Choose one answer per question. You’ll see your score and the reasoning for each answer at the end.</p>
+    <p class="section-intro">Each attempt draws 12 questions across all four exam domains and shuffles the answer choices. You’ll see your score and the reasoning for each answer at the end.</p>
     <div class="quiz-layout">
       <p class="quiz-note">Try it without notes first. For calculation questions, write down the unit you need before you start.</p>
       <div>
@@ -159,7 +159,7 @@
   <section class="section" id="math-drill" aria-labelledby="math-title">
     <p class="eyebrow">10 calculation questions · 10 minutes</p>
     <h2 id="math-title">Pharmacy math drill</h2>
-    <p class="section-intro">Practice conversions, dosing, days’ supply, dilutions, and more. Use scratch paper or a calculator, then review the worked solutions.</p>
+    <p class="section-intro">Each attempt draws 10 calculation questions and shuffles the answer choices. Use scratch paper or a calculator, then review the worked solutions.</p>
     <div class="quiz-layout">
       <p class="quiz-note">You can skip a question and return with <strong>Back</strong>. Unanswered questions count toward your total. The drill submits automatically at 0:00.</p>
       <div>
@@ -1014,7 +1014,33 @@
 </footer>
 <script>
 "use strict";
-const items = [
+// Fisher-Yates shuffle, then choose the least recently used prompts within each group.
+function shuffled(values) {
+  const copy = [...values];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+function makeQuestionDraw(bank, groups) {
+  const lastSeen = new Map();
+  let attempt = 0;
+  return () => {
+    attempt++;
+    const chosen = groups.flatMap(([count, accepts]) =>
+      shuffled(bank.filter(accepts))
+        .sort((a,b) => (lastSeen.get(a) || 0) - (lastSeen.get(b) || 0))
+        .slice(0,count));
+    return shuffled(chosen).map(question => {
+      lastSeen.set(question,attempt);
+      const [topic,page,prompt,choices,correct,explanation] = question;
+      const order = shuffled(choices.map((_, i) => i));
+      return [topic,page,prompt,order.map(i => choices[i]),order.indexOf(correct),explanation];
+    });
+  };
+}
+const mixedBank = [
   ["Medications",2,"A patient has Eliquis on the profile and brings in a new prescription for apixaban. What should you check?",["A dosage form change only","Potential duplicate therapy","A required vaccine report","A product recall"],1,"Eliquis is apixaban. Check whether the new order replaces the old one and bring the possible duplication to the pharmacist."],
   ["Pharmacy math",13,"The ordered liquid dose is 325 mg. The bottle contains 250 mg per 5 mL. How much is one dose?",["5 mL","7.5 mL","6.5 mL","13 mL"],2,"325 mg × 5 mL ÷ 250 mg = 6.5 mL. The mg units cancel."],
   ["Pharmacy math",12,"You dispense 90 tablets with directions to take 1½ tablets twice daily. What is the days’ supply?",["30 days","45 days","60 days","90 days"],0,"1.5 tablets × 2 doses per day = 3 tablets per day. Divide 90 by 3."],
@@ -1026,8 +1052,37 @@ const items = [
   ["Federal rules",7,"A controlled-substance theft was discovered. Which federal notification and form timeline applies?",["Notify DEA only when Form 41 is complete","Written DEA notice within one business day; electronic Form 106 within 45 days","Notify DEA within 45 days; submit Form 222 within 60 days","Submit Form 106 within 45 days; no earlier notice is needed"],1,"The registrant notifies its DEA field office in writing within one business day of discovery and submits electronic Form 106 within 45 days."],
   ["Patient safety",10,"Which national reporting system is specific to adverse events after vaccination?",["MedWatch","DSCSA","VAERS","REMS"],2,"VAERS is the Vaccine Adverse Event Reporting System. A report does not establish that a vaccine caused the event."],
   ["Order entry",14,"Convert 54321-987-10 to the 11-digit reimbursement format.",["54321-0987-10","054321-987-10","54321-987-010","54321-9870-10"],0,"The reimbursement pattern is 5–4–2. Add the leading zero to the three-digit product segment to make 0987."],
-  ["Pharmacy math",12,"A 10 mL bottle provides 20 drops/mL. At one drop in each eye twice daily, how long does the bottle last?",["25 days","40 days","100 days","50 days"],3,"The bottle contains 200 drops. Two eyes × two doses per day = four drops per day, and 200 ÷ 4 = 50 days."]
+  ["Pharmacy math",12,"A 10 mL bottle provides 20 drops/mL. At one drop in each eye twice daily, how long does the bottle last?",["25 days","40 days","100 days","50 days"],3,"The bottle contains 200 drops. Two eyes × two doses per day = four drops per day, and 200 ÷ 4 = 50 days."],
+  ["Medications",2,"Which generic drug is in Cozaar?",["Losartan","Lisinopril","Amlodipine","Atorvastatin"],0,"Cozaar is losartan, an angiotensin receptor blocker."],
+  ["Medications",2,"A patient reports taking sildenafil and brings in a nitroglycerin prescription. What is the major concern to flag?",["A dangerous drop in blood pressure","Duplicate antibiotics","Low blood glucose from insulin","Reduced absorption from calcium"],0,"Nitrates and sildenafil can cause serious hypotension when taken together. Escalate the interaction."],
+  ["Medications",3,"Which drug is a rapid-acting insulin commonly used around mealtimes?",["Insulin glargine","Insulin lispro","Metformin","Glipizide"],1,"Insulin lispro is rapid acting. Insulin glargine is a long-acting basal insulin."],
+  ["Medications",3,"Which listed drug is a rescue bronchodilator?",["Fluticasone nasal spray","Inhaled fluticasone alone","Albuterol","Omeprazole"],2,"Albuterol is a short-acting beta agonist. Inhaled fluticasone alone is a maintenance corticosteroid."],
+  ["Medications",4,"Which drug is the generic name for Zoloft?",["Escitalopram","Bupropion","Alprazolam","Sertraline"],3,"Zoloft is sertraline, an SSRI antidepressant."],
+  ["Medications",4,"Which supplement can reduce levothyroxine absorption and should be flagged for a timing review?",["Melatonin","Calcium","Biotin","Vitamin B12"],1,"Calcium can reduce levothyroxine absorption. Biotin is instead a common lab-assay interference concern."],
+  ["Medications",5,"What does the route sublingual mean?",["In the ear","Between the cheek and gum","Under the tongue","On the surface of the skin"],2,"Sublingual means under the tongue. Buccal means between the cheek and gum."],
+  ["Medications",5,"A liquid antibiotic was reconstituted today. Which information determines how long it can be used after mixing?",["The original stock expiration alone","The exact product’s labeled post-mixing storage and discard instructions","The date the prescription was ordered","A universal 14-day rule"],1,"Post-reconstitution storage and discard dates are product-specific and may be shorter than the unopened expiration."],
+  ["Medications",2,"Which drug is a potassium-sparing diuretic?",["Furosemide","Hydrochlorothiazide","Spironolactone","Clopidogrel"],2,"Spironolactone is potassium-sparing; its electrolyte risk differs from loop and thiazide diuretics."],
+  ["Federal rules",7,"Which paper DEA form is used to order Schedule II stock from a wholesaler?",["Form 41","Form 106","Form 222","Form FDA 3911"],2,"DEA Form 222 is the paper order form for Schedule I or II stock between appropriate registrants. CSOS is its electronic counterpart."],
+  ["Federal rules",8,"What should a pharmacy do first when it identifies potentially counterfeit prescription stock?",["Quarantine the suspect stock and start the investigation procedure","Dispense it if the label is readable","Send it back before documenting it","Assume a recall has already been announced"],0,"Under DSCSA, suspect product is quarantined and investigated to determine whether it is illegitimate."],
+  ["Patient safety",9,"Which dose is written safely with a leading zero and no unnecessary trailing zero?",[".5 mg","0.50 mg","0.5 mg","00.50 mg"],2,"Use a leading zero for doses below one and omit trailing zeros. Write 0.5 mg."],
+  ["Patient safety",9,"What is the purpose of Tall Man lettering?",["To make look-alike drug names easier to distinguish","To identify all refrigerated products","To indicate controlled-substance schedules","To replace barcode verification"],0,"Tall Man lettering highlights the differing parts of look-alike drug names. It does not replace other verification steps."],
+  ["Patient safety",10,"A wrong-strength product is caught at verification before it reaches the patient. What type of event is this?",["A confirmed adverse drug reaction","A near miss","A Class I recall","A routine substitution"],1,"An intercepted error that never reached the patient is a near miss. Report it according to pharmacy policy."],
+  ["Patient safety",10,"A patient wants a recommendation for a new OTC product to use with several prescription drugs. What should the technician do?",["Choose the least expensive OTC product","Recommend the same drug the technician personally uses","Gather relevant information and refer the patient to the pharmacist","Override any software alerts first"],2,"The pharmacist handles patient-specific OTC recommendations and clinical interaction checks."],
+  ["Patient safety",10,"A patient develops breathing trouble immediately after an immunization. What takes priority?",["Finish data entry","File the VAERS report before taking action","Wait to see if the symptoms pass","Activate the emergency response and alert the pharmacist immediately"],3,"Immediate safety and emergency escalation come before paperwork or routine processing."],
+  ["Patient safety",9,"Which pair is appropriate for verifying a patient’s identity before matching them to a prescription?",["First name and shelf bin","Full name and date of birth","Date of birth and drug color","Last name and time of pickup"],1,"Two patient identifiers, such as full name and date of birth, help prevent wrong-patient errors."],
+  ["Order entry",11,"What does the frequency TID mean?",["Every three days","Three times daily","Twice daily","Three tablets at bedtime"],1,"TID means three times daily. Write the directions in plain language."],
+  ["Order entry",14,"What does a lot number identify?",["A batch of product","The patient’s prescription","A single package’s serial identity","The insurance billing group"],0,"The lot identifies a production batch. A recall can affect one lot without affecting every package with the same NDC."],
+  ["Order entry",14,"What should you select to measure a small dose of medication intended by mouth?",["A household spoon","A U-100 insulin syringe","An appropriately sized oral syringe in mL","A spacer"],2,"An appropriately sized oral syringe measures oral-liquid doses in mL and helps prevent wrong-route confusion."],
+  ["Order entry",14,"An expired bottle is found on the dispensing shelf. What is the appropriate action?",["Restock it if it is unopened","Change the date on the label","Dispense it if the patient agrees","Segregate it as nondispensable and follow site policy"],3,"Expired stock should be removed from dispensing inventory and handled through the proper return or disposal process."],
+  ["Pharmacy math",12,"An inhaler has 120 usable actuations. Directions say inhale one puff twice daily. What is the days’ supply?",["30 days","60 days","90 days","120 days"],1,"The patient uses two actuations per day. 120 ÷ 2 = 60 days."]
 ];
+const drawMixed = makeQuestionDraw(mixedBank, [
+  [4, q => q[0] === "Medications"],
+  [2, q => q[0] === "Federal rules"],
+  [3, q => q[0] === "Patient safety"],
+  [3, q => q[0] === "Order entry" || q[0] === "Pharmacy math"]
+]);
+let items = drawMixed();
 const el = id => document.getElementById(id);
 const form = el("quiz-form"), results = el("results"), error = el("error");
 let current = 0, answers = Array(items.length).fill(null);
@@ -1089,7 +1144,8 @@ form.addEventListener("submit", e => {
 });
 el("previous").addEventListener("click", () => { if (current > 0) { current--; renderQuestion(true); } });
 el("reset").addEventListener("click", () => {
-  current = 0; answers.fill(null); results.hidden = true; form.hidden = false; renderQuestion(true);
+  items = drawMixed(); current = 0; answers = Array(items.length).fill(null);
+  results.hidden = true; form.hidden = false; renderQuestion(true);
 });
 function openLinkedPage() {
   const id = location.hash.slice(1);
@@ -1109,7 +1165,7 @@ openLinkedPage();
 <script>
 (() => {
   "use strict";
-  const questions = [
+  const mathBank = [
     ["Metric conversion",11,"A dose is written as 0.075 mg. What is the equivalent in micrograms?",["7.5 mcg","75 mcg","750 mcg","7,500 mcg"],1,"0.075 mg × 1,000 mcg/mg = 75 mcg."],
     ["Tablet quantity",12,"A prescription calls for 1½ tablets by mouth twice daily for 12 days. How many tablets are needed?",["18 tablets","24 tablets","30 tablets","36 tablets"],3,"1.5 tablets/dose × 2 doses/day × 12 days = 36 tablets."],
     ["Liquid dose",13,"The prescribed dose is 350 mg. The suspension contains 200 mg per 5 mL. How many mL are needed for one dose?",["7 mL","8 mL","8.75 mL","10 mL"],2,"350 mg × 5 mL ÷ 200 mg = 8.75 mL per dose."],
@@ -1119,11 +1175,26 @@ openLinkedPage();
     ["Dilution",13,"How many mL of a 30 mg/mL stock solution are needed for 150 mL of a 6 mg/mL final solution?",["25 mL","30 mL","45 mL","120 mL"],1,"C₁ × V₁ = C₂ × V₂. V₁ = (6 mg/mL × 150 mL) ÷ 30 mg/mL = 30 mL of stock. Bring to 150 mL total."],
     ["Infusion rate",13,"A math problem specifies 750 mL over 5 hours. What is the rate in mL/hour?",["150 mL/hour","125 mL/hour","175 mL/hour","250 mL/hour"],0,"Divide 750 mL by 5 hours to get 150 mL/hour."],
     ["Insulin days’ supply",12,"Three 3 mL U-100 pens are dispensed for a dose of 36 units daily. Ignore priming and in-use discard for this exercise. How many days will the pens last?",["20 days","24 days","25 days","30 days"],2,"U-100 means 100 units/mL. 3 × 3 mL × 100 units/mL = 900 units. 900 ÷ 36 units/day = 25 days."],
-    ["Whole packages",12,"A prescription requires 175 mL. The product comes in sealed 60 mL bottles that cannot be split. How many bottles are needed?",["2 bottles","3 bottles","4 bottles","5 bottles"],1,"175 ÷ 60 ≈ 2.92 bottles. Round up to 3 whole bottles, for a total package volume of 180 mL."]
+    ["Whole packages",12,"A prescription requires 175 mL. The product comes in sealed 60 mL bottles that cannot be split. How many bottles are needed?",["2 bottles","3 bottles","4 bottles","5 bottles"],1,"175 ÷ 60 ≈ 2.92 bottles. Round up to 3 whole bottles, for a total package volume of 180 mL."],
+    ["Metric conversion",11,"How many milligrams are in 0.6 g?",["6 mg","60 mg","600 mg","6,000 mg"],2,"Multiply 0.6 g by 1,000 mg/g to get 600 mg."],
+    ["Volume conversion",11,"How many milliliters are in 1.25 L?",["125 mL","1,250 mL","12,500 mL","0.125 mL"],1,"1 L = 1,000 mL, so 1.25 × 1,000 = 1,250 mL."],
+    ["Tablet taper",12,"A labeled taper calls for 3 tablets daily for 4 days, then 1 tablet daily for 6 days. What total quantity is needed?",["10 tablets","15 tablets","18 tablets","24 tablets"],2,"The first stage uses 3 × 4 = 12 tablets. The second uses 1 × 6 = 6. Total: 18 tablets."],
+    ["Eye-drop supply",12,"A 5 mL bottle delivers 20 drops/mL. At one drop in each eye every morning, how many days will it last?",["25 days","40 days","50 days","100 days"],2,"The bottle contains 5 × 20 = 100 drops. At 2 drops per day, 100 ÷ 2 = 50 days."],
+    ["Liquid dose",13,"The prescribed dose is 125 mg and the product contains 50 mg/mL. How many mL are needed per dose?",["0.4 mL","2.5 mL","4 mL","6.25 mL"],1,"125 mg ÷ 50 mg/mL = 2.5 mL."],
+    ["Weight-based dose",13,"A 33 lb patient is prescribed 8 mg/kg per dose. Use 2.2 lb/kg. How many mg are in one dose?",["40 mg","82.5 mg","120 mg","264 mg"],2,"33 ÷ 2.2 = 15 kg. Multiply 15 kg by 8 mg/kg per dose to get 120 mg."],
+    ["Percent strength",13,"How many milligrams of drug are in 40 mL of a 1.5% w/v solution?",["60 mg","150 mg","400 mg","600 mg"],3,"1.5 g per 100 mL = 15 mg/mL. Multiply 15 mg/mL by 40 mL to get 600 mg."],
+    ["Ratio strength",13,"A 1:500 w/v solution contains how many mg/mL?",["0.5 mg/mL","1 mg/mL","2 mg/mL","5 mg/mL"],2,"1:500 w/v means 1 g in 500 mL. Convert 1 g to 1,000 mg, then divide by 500 mL."],
+    ["Dilution",13,"To make 80 mL of 5 mg/mL from a 20 mg/mL stock, what volume of drug-free diluent is needed if volumes are additive?",["15 mL","20 mL","60 mL","75 mL"],2,"Use (5 × 80) ÷ 20 = 20 mL stock. To reach 80 mL total, add 80 − 20 = 60 mL diluent."],
+    ["Infusion time",13,"A math problem gives a volume of 360 mL and a rate of 90 mL/hour. How long will it take?",["3 hours","4 hours","5 hours","6 hours"],1,"Time = volume ÷ rate. 360 mL ÷ 90 mL/hour = 4 hours."],
+    ["Gravity flow rate",13,"A math problem specifies 240 mL over 2 hours with tubing that delivers 15 drops/mL. What is the flow in drops per minute?",["15 drops/min","20 drops/min","30 drops/min","60 drops/min"],2,"(240 mL × 15 drops/mL) ÷ 120 minutes = 30 drops/min."],
+    ["Insulin quantity",12,"A U-100 vial contains 10 mL. How many total units of insulin does it contain?",["100 units","500 units","1,000 units","10,000 units"],2,"U-100 is 100 units/mL. At 10 mL, that is 100 × 10 = 1,000 units."],
+    ["Patch days’ supply",12,"One patch is applied every 72 hours. How many days do 8 patches cover?",["8 days","16 days","24 days","48 days"],2,"72 hours ÷ 24 = 3 days per patch. 8 × 3 = 24 days."],
+    ["Refrigerator temperature",11,"Convert a reading of 46.4°F to degrees Celsius.",["4°C","6°C","8°C","10°C"],2,"°C = (°F − 32) × 5/9. (46.4 − 32) × 5/9 = 8°C."]
   ];
+  const drawMath = makeQuestionDraw(mathBank, [[10, () => true]]);
   const $ = id => document.getElementById("math-" + id);
   const duration = 10 * 60 * 1000;
-  let index = 0, answers = [], deadline = 0, timer = 0, warned = false;
+  let questions = [], index = 0, answers = [], deadline = 0, timer = 0, warned = false;
   function text(tag, value, className) {
     const node = document.createElement(tag);
     node.textContent = value;
@@ -1189,7 +1260,7 @@ openLinkedPage();
     return true;
   }
   $("start").addEventListener("click", () => {
-    index = 0; answers = Array(questions.length).fill(null); warned = false;
+    questions = drawMath(); index = 0; answers = Array(questions.length).fill(null); warned = false;
     deadline = Date.now() + duration;
     $("ready").hidden = true; $("form").hidden = false;
     render(); updateProgress(); tick(); timer = setInterval(tick, 250);
