@@ -112,13 +112,13 @@
   @media(max-width:470px){.mast .wrap{flex-wrap:wrap;column-gap:12px;row-gap:0}.mast nav{gap:10px}.mast nav a{font-size:.82rem}}
   @media(max-width:360px){.wrap{width:calc(100% - 24px)}.mast .wrap,nav{column-gap:8px}.mast nav a{font-size:.79rem}}
 </style>
-<link rel="stylesheet" href="./practice-dashboard.css?v=1">
+<link rel="stylesheet" href="./practice-dashboard.css?v=2">
 </head>
 <body id="top">
 <a class="skip" href="#main">Skip to content</a>
 <header class="mast"><div class="wrap">
   <a href="#top" class="brand">PTCE Study Guide</a>
-  <nav aria-label="Main navigation"><a href="#practice-dashboard">Dashboard</a><a href="#study">Guide</a><a href="#quiz">Quiz</a><a href="#math-drill">Math drill</a><a href="#resources">Sources</a></nav>
+  <nav aria-label="Main navigation"><a href="#practice-dashboard">Dashboard</a><a href="#study">Guide</a><a href="#quiz">Quiz</a><a href="#math-drill">Math drill</a><a href="#math-techniques">Math techniques</a><a href="#resources">Sources</a></nav>
 </div></header>
 <main class="wrap" id="main">
   <header class="hero">
@@ -158,7 +158,7 @@
     </section>
     <section class="pd-panel" id="practice-by-domain" role="tabpanel" aria-labelledby="pd-tab-domain" tabindex="0" hidden>
       <div class="pd-layout" data-setup="domain">
-        <div class="pd-lead"><p class="eyebrow">Target your review</p><h3>Practice one domain</h3><p>Choose a domain and the size of your set. Practice is untimed, with explanations and guide links after submission.</p></div>
+        <div class="pd-lead"><p class="eyebrow">Target your review</p><h3>Practice one domain</h3><p>Choose a domain and the size of your set. Practice is untimed, with explanations and guide links after submission.</p><a href="#math-techniques">Review math techniques</a></div>
         <form class="quiz-card pd-config" id="pd-domain-form">
           <div class="pd-fields">
             <label for="pd-domain-choice">Exam domain<select id="pd-domain-choice"></select></label>
@@ -223,7 +223,7 @@
     <h2 id="math-title">Pharmacy math drill</h2>
     <p class="section-intro">Draw 10 questions from 350 calculation items, including practice variants with different numbers. Use scratch paper or a calculator, then review the worked solutions.</p>
     <div class="quiz-layout">
-      <p class="quiz-note">You can skip a question and return with <strong>Back</strong>. Unanswered questions count toward your total. The drill submits automatically at 0:00.</p>
+      <div class="quiz-note"><p>You can skip a question and return with <strong>Back</strong>. Unanswered questions count toward your total. The drill submits automatically at 0:00.</p><p><a href="#math-techniques">Review the math techniques before starting</a>.</p></div>
       <div>
         <div class="quiz-card" id="math-ready">
           <p class="math-help"><strong>10:00</strong> to complete all 10 questions. The timer starts only when you press Start timed drill.</p>
@@ -252,6 +252,64 @@
         <noscript><p>Enable JavaScript to take the timed math drill. Worked examples are available in study pages 11–13 without JavaScript.</p></noscript>
       </div>
     </div>
+  </section>
+  <section class="section" id="math-techniques" aria-labelledby="techniques-title">
+    <p class="eyebrow">Pharmacy math · formulas and worked examples</p>
+    <h2 id="techniques-title">Math techniques</h2>
+    <p class="section-intro">Start with the unit the question asks for. Then make the units do the work. Use these examples for practice, and check the <a href="https://myaccount.ptcb.org/lib24watch/files/download/1489" target="_blank" rel="noopener noreferrer">PTCB exam outline</a> for the calculations covered under Order Entry &amp; Processing.</p>
+    <div class="calc-method">
+      <h3>Use this method on every calculation</h3>
+      <ol>
+        <li><strong>Name the target:</strong> Write the unit you need: mL/dose, tablets, days, mg/mL, or drops/min.</li>
+        <li><strong>Match the units:</strong> Convert before calculating. Write factors so the units you don’t need appear once on top and once on the bottom.</li>
+        <li><strong>Calculate:</strong> Use the numbers in the question. Keep extra digits until the last step, then round only as directed.</li>
+        <li><strong>Check the result:</strong> Does the unit match? Does the size make sense? When possible, multiply back to recover the original amount.</li>
+      </ol>
+    </div>
+    <div class="calc-lessons">
+      <details id="calc-units"><summary><span class="folio">01</span><span>Unit conversions</span></summary><div class="page-copy">
+        <p><strong>Key factors:</strong> 1 g = 1,000 mg; 1 mg = 1,000 mcg; 1 L = 1,000 mL; 1 hour = 60 minutes. Use the factor provided in the question for approximations such as 2.2 lb/kg or 5 mL per teaspoon.</p>
+        <p><strong>Example:</strong> 0.075 mg × (1,000 mcg / 1 mg) = 75 mcg. The mg cancel. Converting to a smaller unit gives a larger number for the same amount.</p>
+        <p><strong>Temperature:</strong> °C = (°F − 32) × 5/9; °F = (°C × 9/5) + 32. For example, (41 − 32) × 5/9 = 5 °C.</p>
+      </div></details>
+      <details id="calc-dose"><summary><span class="folio">02</span><span>Dose to volume or tablets</span></summary><div class="page-copy">
+        <p><strong>Setup:</strong> Desired dose × (labeled volume or number of tablets ÷ labeled dose). The desired and labeled doses must use the same mass unit.</p>
+        <p><strong>Example:</strong> For 375 mg from a 250 mg/5 mL bottle: 375 mg × (5 mL / 250 mg) = 7.5 mL. The target is 1.5 times 250 mg, so the answer should be 1.5 times 5 mL.</p>
+        <p><strong>Tablet example:</strong> 500 mg × (1 tablet / 250 mg) = 2 tablets. In practice, do not assume a fractional tablet can be split unless the product is verified.</p>
+      </div></details>
+      <details id="calc-weight"><summary><span class="folio">03</span><span>Weight-based dose</span></summary><div class="page-copy">
+        <p><strong>Setup:</strong> Convert lb to kg first if needed. If the order gives mg/kg/day, multiply by kg to find mg/day, then divide by the number of doses only if asked for mg/dose. If it already says mg/kg/dose, do not divide again.</p>
+        <p><strong>Example:</strong> 44 lb ÷ 2.2 lb/kg = 20 kg. At 15 mg/kg/day in three equal doses, 20 × 15 = 300 mg/day and 300 ÷ 3 = 100 mg per dose.</p>
+      </div></details>
+      <details id="calc-supply"><summary><span class="folio">04</span><span>Quantity, days’ supply, tapers, and packages</span></summary><div class="page-copy">
+        <p><strong>Setup:</strong> Amount per dose × doses per day = amount per day. Multiply by treatment days for quantity; divide amount dispensed by amount per day for days’ supply.</p>
+        <p><strong>Examples:</strong> 1½ tablets twice daily means 3 tablets/day, so 90 tablets last 30 days. For a taper of 3 tablets daily for 4 days, then 1 daily for 5 days, total (3 × 4) + (1 × 5) = 17 tablets.</p>
+        <p><strong>Whole packages:</strong> Divide by package size, then round up if intact packages are required. For 125 mL in sealed 60 mL bottles, 125 ÷ 60 is just over 2, so you need 3 bottles.</p>
+      </div></details>
+      <details id="calc-devices"><summary><span class="folio">05</span><span>Eye drops, inhalers, insulin, and patches</span></summary><div class="page-copy">
+        <p><strong>Setup:</strong> Convert what you have into the unit being used daily. Use product-specific values or the assumptions given in the question.</p>
+        <ul>
+          <li><strong>Eye drops:</strong> At 20 drops/mL, a 10 mL bottle contains 200 drops. One drop in each eye twice daily is 4 drops/day, so 200 ÷ 4 = 50 days under the exercise’s assumptions.</li>
+          <li><strong>Inhaler:</strong> 120 usable actuations ÷ 4 puffs/day = 30 days. Count usable actuations, not canister volume.</li>
+          <li><strong>Insulin:</strong> Two 3 mL U-100 pens contain 2 × 3 mL × 100 units/mL = 600 units. At 24 units/day, that’s 25 full days before considering priming or in-use limits.</li>
+          <li><strong>Patches:</strong> Replacing one patch every 72 hours means 3 days per patch. A supply of 5 patches covers 15 days in the exercise.</li>
+        </ul>
+      </div></details>
+      <details id="calc-strength"><summary><span class="folio">06</span><span>Percent and ratio strength</span></summary><div class="page-copy">
+        <p><strong>Percent:</strong> Read the basis first. 3% w/v means 3 g per 100 mL, so 3,000 mg ÷ 100 mL = 30 mg/mL. By contrast, 2% w/w means 2 g per 100 g; 45 g of that product contains 0.9 g (900 mg).</p>
+        <p><strong>Ratio:</strong> A 1:2,000 w/v strength means 1 g per 2,000 mL, so 1,000 mg ÷ 2,000 mL = 0.5 mg/mL. A bigger denominator means a weaker solution when the numerator is unchanged.</p>
+      </div></details>
+      <details id="calc-dilution"><summary><span class="folio">07</span><span>Dilution: stock versus added diluent</span></summary><div class="page-copy">
+        <p><strong>Setup:</strong> Stock concentration × stock volume = final concentration × final volume, or C₁V₁ = C₂V₂. Match the concentration units before solving.</p>
+        <p><strong>Example:</strong> To make 120 mL at 10 mg/mL from 40 mg/mL stock, use (10 × 120) ÷ 40 = 30 mL of stock. If volumes are additive and the question asks for diluent, subtract: 120 − 30 = 90 mL of diluent.</p>
+        <p><strong>Quick check:</strong> One-quarter-strength solution needs one-quarter of its final volume as stock.</p>
+      </div></details>
+      <details id="calc-flow"><summary><span class="folio">08</span><span>Infusion rate, time, and drops per minute</span></summary><div class="page-copy">
+        <p><strong>Pump rate:</strong> Total mL ÷ hours = mL/hour. For 500 mL over 4 hours, the rate is 125 mL/hour. If the question asks for time instead, divide volume by that rate.</p>
+        <p><strong>Gravity rate:</strong> (mL × tubing drop factor in drops/mL) ÷ minutes. For 500 mL over 4 hours with 15 drops/mL tubing, (500 × 15) ÷ 240 = 31.25 drops/min, or 31 drops/min if rounded to the nearest whole drop.</p>
+      </div></details>
+    </div>
+    <p class="calc-footnote">These are exam-prep examples, not patient-specific instructions. See <a href="#page-11">study pages 11–13</a> for prescription notation and more examples, or <a href="#math-drill">try the timed math drill</a>.</p>
   </section>
   <section class="section" id="study" aria-labelledby="study-title">
     <p class="eyebrow">15 pages · four exam domains</p>
@@ -1080,6 +1138,7 @@
   <p>Independent study material. The original question wording includes fact-based prompts and numerical calculation variants. These are not official PTCB exam items. No answers are sent to a server. Mock and domain progress are kept in the current browser tab. <a href="#top">Back to top</a></p>
 </footer>
 <script src="./question-bank.js?v=1"></script>
+<script src="./math-techniques.js?v=1"></script>
 <script>
 "use strict";
 // Fisher-Yates shuffle, then choose the least recently used prompts within each group.
@@ -1196,7 +1255,9 @@ function renderResults() {
     mark.dataset.ok = isRight;
     const link = useText("a", `Review page ${items[i][1]}`);
     link.href = "#" + pageId(items[i][1]);
-    li.append(mark, useText("p", `${i+1}. ${question}`), useText("p", `Your answer: ${choices[answers[i]]}`), useText("p", `Correct answer: ${choices[correct]}`), useText("p", why), link);
+    li.append(mark, useText("p", `${i+1}. ${question}`), useText("p", `Your answer: ${choices[answers[i]]}`), useText("p", `Correct answer: ${choices[correct]}`), useText("p", why));
+    if (items[i][0] === "Pharmacy math") window.PTCE_MATH_TECHNIQUES?.append(li,items[i][0],question);
+    li.append(link);
     return li;
   }));
   form.hidden = true; results.hidden = false; el("score").focus();
@@ -1221,13 +1282,13 @@ el("reset").addEventListener("click", () => restartMixed(false));
 el("quiz-replay").addEventListener("click", () => restartMixed(true));
 function openLinkedPage() {
   const id = location.hash.slice(1);
-  if (!/^page-\d\d$/.test(id)) return;
+  if (!/^(page-\d\d|calc-[a-z]+)$/.test(id)) return;
   const details = el(id);
   if (details) { details.open = true; details.scrollIntoView(); }
 }
 window.addEventListener("hashchange", openLinkedPage);
 document.addEventListener("click", e => {
-  const anchor = e.target.closest('a[href^="#page-"]');
+  const anchor = e.target.closest('a[href^="#page-"], a[href^="#calc-"]');
   if (anchor && anchor.hash === location.hash) openLinkedPage();
 });
 form.hidden = false;
@@ -1316,7 +1377,9 @@ openLinkedPage();
       const result = text("span", `${i + 1}. ${ok ? "Correct" : answer === null ? "Unanswered" : "Incorrect"}`, "mark");
       result.dataset.ok = ok;
       const link = text("a", `Review page ${page}`); link.href = `#page-${page}`;
-      li.append(result, text("p", questions[i][2], "math-review"), text("p", `Your answer: ${answer === null ? "No answer" : choices[answer]}`), text("p", `Correct answer: ${choices[correct]}`), text("p", solution), link);
+      li.append(result, text("p", questions[i][2], "math-review"), text("p", `Your answer: ${answer === null ? "No answer" : choices[answer]}`), text("p", `Correct answer: ${choices[correct]}`), text("p", solution));
+      window.PTCE_MATH_TECHNIQUES?.append(li,questions[i][0],questions[i][2]);
+      li.append(link);
       return li;
     }));
     $("form").hidden = true; $("results").hidden = false; $("score").focus();
@@ -1374,6 +1437,6 @@ openLinkedPage();
   window.PTCE_DASHBOARD_DATA = data;
 })();
 </script>
-<script src="./practice-dashboard.js?v=1" defer></script>
+<script src="./practice-dashboard.js?v=2" defer></script>
 </body>
 </html>

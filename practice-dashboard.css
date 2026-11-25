@@ -41,10 +41,22 @@
 #pd-paper-key summary{display:flex;justify-content:space-between}
 #pd-paper-key .page-copy{padding-top:16px}
 #pd-paper-answers li{margin-block:.3em}
+.calc-method{background:var(--wash);border:1px solid var(--rule);border-radius:8px;padding:clamp(16px,3.5vw,28px);margin-bottom:18px}
+.calc-method h3{margin:0;color:var(--ink);font-size:1.2rem;line-height:1.25}
+.calc-method ol{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 30px;margin:12px 0 0;padding-inline-start:1.35rem}
+.calc-method li::marker{font-weight:750;color:var(--ink)}
+.calc-lessons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-items:start}
+.calc-lessons details{margin:0}
+.calc-footnote{margin:16px 0 0;color:var(--quiet);font-size:.9rem}
+.calc-tip{background:var(--wash);border-radius:5px;margin:10px 0 4px;padding:8px 12px}
+.calc-tip p,.calc-paper-work{margin:4px 0}
+.calc-tip a{display:inline-flex;align-items:center;min-height:44px}
+@media(max-width:780px){.mast .wrap,.mast nav{flex-wrap:wrap}.mast nav{column-gap:16px;row-gap:0}}
 @media(max-width:690px){
   .pd-layout{grid-template-columns:minmax(0,1fr);gap:14px}
   #pd-tabs a{display:block;padding-inline:7px;font-size:.83rem}
   #pd-tabs small{display:block;margin-bottom:4px}
+  .calc-method ol,.calc-lessons{grid-template-columns:minmax(0,1fr)}
 }
 @media(max-width:430px){
   .mast nav{flex-wrap:wrap}
@@ -64,4 +76,7 @@
   body.pd-printing #pd-paper-questions>li{break-inside:avoid;margin:5pt 0;padding-top:5pt}
   body.pd-printing #pd-paper-key{break-before:page;border:0;margin:0}
   body.pd-printing #pd-paper-key .page-copy{padding:0}
+  body.pd-printing #pd-paper-key li{break-inside:avoid}
+  body.pd-printing #pd-paper-key .calc-tip{margin:0;padding:0;background:none}
+  body.pd-printing #pd-paper-key .calc-tip a{display:none}
 }

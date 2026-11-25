@@ -187,7 +187,9 @@
           mark.dataset.ok = ok;
           const link = node("a",`Review page ${q.page}`); link.href = `#page-${String(q.page).padStart(2,"0")}`;
           li.append(mark,node("p",`${start+i+1}. ${q.stem}`),node("p",`Your answer: ${answer === null ? "No answer" : q.choices[answer]}`),
-            node("p",`Correct answer: ${q.choices[q.correct]}`),node("p",q.why),link);
+            node("p",`Correct answer: ${q.choices[q.correct]}`),node("p",q.why));
+          if (q.math) window.PTCE_MATH_TECHNIQUES?.append(li,q.topic,q.stem);
+          li.append(link);
           return li;
         }));
         x("review-back").disabled = reviewPage === 0;
@@ -296,7 +298,12 @@
     }));
     $("pd-paper-answers").replaceChildren(...questions.map(([id,order]) => {
       const q = rows[id];
-      return node("li",`${letters[order.indexOf(q.correct)]}. ${q.choices[q.correct]}`);
+      const answer = node("li",`${letters[order.indexOf(q.correct)]}. ${q.choices[q.correct]}`);
+      if (q.math) {
+        answer.append(node("p",q.why,"calc-paper-work"));
+        window.PTCE_MATH_TECHNIQUES?.append(answer,q.topic,q.stem);
+      }
+      return answer;
     }));
     $("pd-paper-key").open = false;
     $("pd-paper-result").hidden = false;
