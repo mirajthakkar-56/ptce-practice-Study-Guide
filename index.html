@@ -101,14 +101,23 @@
     .hero-copy{padding-right:0}
     .cover li{padding:4px 0}
   }
-  @media(max-width:360px){.wrap{width:calc(100% - 24px)}.mast .wrap,nav{gap:8px}.mast nav a{font-size:.82rem}}
+  .math-meta{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;color:var(--quiet);font-size:.88rem;font-weight:700}
+  .math-clock{display:inline-flex;align-items:center;gap:8px;background:var(--wash);color:var(--ink);padding:3px 10px;border-radius:4px;white-space:nowrap}
+  .math-clock output{font-size:1.35rem;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+  .math-clock[data-low=true]{color:var(--danger);background:#fae9df}
+  .math-controls{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;margin-top:18px}
+  .math-forward{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px}
+  .math-help{margin:0 0 16px}
+  .math-review{font-weight:600}
+  @media(max-width:470px){.mast .wrap{flex-wrap:wrap;column-gap:12px;row-gap:0}.mast nav{gap:10px}.mast nav a{font-size:.82rem}}
+  @media(max-width:360px){.wrap{width:calc(100% - 24px)}.mast .wrap,nav{column-gap:8px}.mast nav a{font-size:.79rem}}
 </style>
 </head>
 <body id="top">
 <a class="skip" href="#main">Skip to content</a>
 <header class="mast"><div class="wrap">
   <a href="#top" class="brand">PTCE Study Guide</a>
-  <nav aria-label="Main navigation"><a href="#study">Guide</a><a href="#quiz">Quiz</a><a href="#resources">Sources</a></nav>
+  <nav aria-label="Main navigation"><a href="#study">Guide</a><a href="#quiz">Quiz</a><a href="#math-drill">Math drill</a><a href="#resources">Sources</a></nav>
 </div></header>
 <main class="wrap" id="main">
   <header class="hero">
@@ -144,6 +153,37 @@
           <ol class="review" id="review"></ol>
         </section>
         <noscript><p>Enable JavaScript to take the interactive quiz. You can still read the guide and the printable questions on page 15.</p></noscript>
+      </div>
+    </div>
+  </section>
+  <section class="section" id="math-drill" aria-labelledby="math-title">
+    <p class="eyebrow">10 calculation questions · 10 minutes</p>
+    <h2 id="math-title">Pharmacy math drill</h2>
+    <p class="section-intro">Practice conversions, dosing, days’ supply, dilutions, and more. Use scratch paper or a calculator, then review the worked solutions.</p>
+    <div class="quiz-layout">
+      <p class="quiz-note">You can skip a question and return with <strong>Back</strong>. Unanswered questions count toward your total. The drill submits automatically at 0:00.</p>
+      <div>
+        <div class="quiz-card" id="math-ready">
+          <p class="math-help"><strong>10:00</strong> to complete all 10 questions. The timer starts only when you press Start timed drill.</p>
+          <button class="button" type="button" id="math-start">Start timed drill</button>
+        </div>
+        <form class="quiz-card" id="math-form" hidden>
+          <div class="math-meta"><span id="math-position"></span><span class="math-clock" id="math-clock">Time left <output id="math-time" aria-live="off">10:00</output></span></div>
+          <progress id="math-progress" value="0" max="10" aria-label="Math questions answered"></progress>
+          <fieldset><legend id="math-question" tabindex="-1"></legend><div id="math-options"></div></fieldset>
+          <p id="math-alert" class="error" role="status"></p>
+          <div class="math-controls">
+            <button class="button secondary" id="math-back" type="button">Back</button>
+            <div class="math-forward"><button class="button secondary" id="math-skip" type="button">Skip</button><button class="button" id="math-next" type="submit">Next question</button></div>
+          </div>
+        </form>
+        <section class="results" id="math-results" aria-labelledby="math-score" hidden>
+          <p class="eyebrow">Math drill results</p><h3 id="math-score" tabindex="-1"></h3>
+          <p id="math-status"></p>
+          <button class="button" id="math-retake" type="button">Retake math drill</button>
+          <ol class="review" id="math-review"></ol>
+        </section>
+        <noscript><p>Enable JavaScript to take the timed math drill. Worked examples are available in study pages 11–13 without JavaScript.</p></noscript>
       </div>
     </div>
   </section>
@@ -1065,6 +1105,117 @@ document.addEventListener("click", e => {
 form.hidden = false;
 renderQuestion();
 openLinkedPage();
+</script>
+<script>
+(() => {
+  "use strict";
+  const questions = [
+    ["Metric conversion",11,"A dose is written as 0.075 mg. What is the equivalent in micrograms?",["7.5 mcg","75 mcg","750 mcg","7,500 mcg"],1,"0.075 mg × 1,000 mcg/mg = 75 mcg."],
+    ["Tablet quantity",12,"A prescription calls for 1½ tablets by mouth twice daily for 12 days. How many tablets are needed?",["18 tablets","24 tablets","30 tablets","36 tablets"],3,"1.5 tablets/dose × 2 doses/day × 12 days = 36 tablets."],
+    ["Liquid dose",13,"The prescribed dose is 350 mg. The suspension contains 200 mg per 5 mL. How many mL are needed for one dose?",["7 mL","8 mL","8.75 mL","10 mL"],2,"350 mg × 5 mL ÷ 200 mg = 8.75 mL per dose."],
+    ["Days’ supply",12,"A patient receives 180 mL of liquid and takes 7.5 mL twice daily. How many days will it last?",["12 days","15 days","18 days","24 days"],0,"7.5 mL × 2 = 15 mL per day. 180 mL ÷ 15 mL/day = 12 days."],
+    ["Weight-based dose",13,"A 55 lb patient is prescribed 24 mg/kg/day in three equal doses. Use 2.2 lb/kg. How many mg are in each dose?",["150 mg","180 mg","200 mg","600 mg"],2,"55 lb ÷ 2.2 lb/kg = 25 kg. 25 kg × 24 mg/kg/day = 600 mg/day. 600 ÷ 3 = 200 mg per dose."],
+    ["Percent strength",13,"A solution is 0.4% w/v. What is its concentration in mg/mL?",["0.04 mg/mL","0.4 mg/mL","40 mg/mL","4 mg/mL"],3,"0.4% w/v means 0.4 g per 100 mL. Convert 0.4 g to 400 mg, then divide 400 mg by 100 mL."],
+    ["Dilution",13,"How many mL of a 30 mg/mL stock solution are needed for 150 mL of a 6 mg/mL final solution?",["25 mL","30 mL","45 mL","120 mL"],1,"C₁ × V₁ = C₂ × V₂. V₁ = (6 mg/mL × 150 mL) ÷ 30 mg/mL = 30 mL of stock. Bring to 150 mL total."],
+    ["Infusion rate",13,"A math problem specifies 750 mL over 5 hours. What is the rate in mL/hour?",["150 mL/hour","125 mL/hour","175 mL/hour","250 mL/hour"],0,"Divide 750 mL by 5 hours to get 150 mL/hour."],
+    ["Insulin days’ supply",12,"Three 3 mL U-100 pens are dispensed for a dose of 36 units daily. Ignore priming and in-use discard for this exercise. How many days will the pens last?",["20 days","24 days","25 days","30 days"],2,"U-100 means 100 units/mL. 3 × 3 mL × 100 units/mL = 900 units. 900 ÷ 36 units/day = 25 days."],
+    ["Whole packages",12,"A prescription requires 175 mL. The product comes in sealed 60 mL bottles that cannot be split. How many bottles are needed?",["2 bottles","3 bottles","4 bottles","5 bottles"],1,"175 ÷ 60 ≈ 2.92 bottles. Round up to 3 whole bottles, for a total package volume of 180 mL."]
+  ];
+  const $ = id => document.getElementById("math-" + id);
+  const duration = 10 * 60 * 1000;
+  let index = 0, answers = [], deadline = 0, timer = 0, warned = false;
+  function text(tag, value, className) {
+    const node = document.createElement(tag);
+    node.textContent = value;
+    if (className) node.className = className;
+    return node;
+  }
+  function render(focus = true) {
+    const [topic,, prompt, choices] = questions[index];
+    $("position").textContent = `Question ${index + 1} of ${questions.length} · ${topic}`;
+    $("question").textContent = prompt;
+    $("options").replaceChildren(...choices.map((choice, i) => {
+      const label = document.createElement("label"), input = document.createElement("input");
+      label.className = "choice"; input.type = "radio"; input.name = "math-answer"; input.value = i;
+      input.checked = answers[index] === i;
+      const key = text("span", "ABCD"[i] + ".", "choice-key"); key.setAttribute("aria-hidden","true");
+      label.append(input, key, text("span", choice)); return label;
+    }));
+    $("back").disabled = index === 0;
+    $("skip").hidden = index === questions.length - 1;
+    $("next").textContent = index === questions.length - 1 ? "Submit drill" : "Next question";
+    $("alert").textContent = "";
+    if (focus) $("question").focus();
+  }
+  function updateProgress() {
+    const count = answers.filter(answer => answer !== null).length;
+    $("progress").value = count;
+    $("progress").setAttribute("aria-valuetext", `${count} of ${questions.length} questions answered`);
+  }
+  function finish(expired) {
+    if (!deadline) return;
+    const remaining = Math.max(0, deadline - Date.now());
+    clearInterval(timer);
+    deadline = 0;
+    const score = questions.filter((q, i) => q[4] === answers[i]).length;
+    const skipped = answers.filter(answer => answer === null).length;
+    const elapsed = Math.floor((duration - remaining) / 1000);
+    $("score").textContent = `${score} / ${questions.length} correct`;
+    $("status").textContent = `${expired ? "Time’s up. Your answers were submitted automatically." : `Submitted in ${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, "0")}.`} ${skipped} unanswered.`;
+    $("review").replaceChildren(...questions.map(([, page,, choices, correct, solution], i) => {
+      const li = document.createElement("li"), answer = answers[i], ok = answer === correct;
+      const result = text("span", `${i + 1}. ${ok ? "Correct" : answer === null ? "Unanswered" : "Incorrect"}`, "mark");
+      result.dataset.ok = ok;
+      const link = text("a", `Review page ${page}`); link.href = `#page-${page}`;
+      li.append(result, text("p", questions[i][2], "math-review"), text("p", `Your answer: ${answer === null ? "No answer" : choices[answer]}`), text("p", `Correct answer: ${choices[correct]}`), text("p", solution), link);
+      return li;
+    }));
+    $("form").hidden = true; $("results").hidden = false; $("score").focus();
+  }
+  function tick() {
+    if (!deadline) return;
+    const remaining = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+    $("time").textContent = `${Math.floor(remaining / 60)}:${String(remaining % 60).padStart(2,"0")}`;
+    $("clock").dataset.low = remaining <= 60;
+    if (remaining === 0) { finish(true); return; }
+    if (remaining <= 60 && !warned) {
+      warned = true;
+      $("alert").textContent = "One minute or less remains.";
+    }
+  }
+  function stillOpen() {
+    if (!deadline) return false;
+    if (Date.now() >= deadline) { tick(); return false; }
+    return true;
+  }
+  $("start").addEventListener("click", () => {
+    index = 0; answers = Array(questions.length).fill(null); warned = false;
+    deadline = Date.now() + duration;
+    $("ready").hidden = true; $("form").hidden = false;
+    render(); updateProgress(); tick(); timer = setInterval(tick, 250);
+  });
+  $("form").addEventListener("change", event => {
+    if (event.target.name !== "math-answer" || !stillOpen()) return;
+    answers[index] = Number(event.target.value);
+    $("alert").textContent = ""; updateProgress();
+  });
+  $("form").addEventListener("submit", event => {
+    event.preventDefault();
+    if (!stillOpen()) return;
+    if (index === questions.length - 1) { finish(false); return; }
+    if (answers[index] === null) {
+      $("alert").textContent = "Choose an answer or select Skip.";
+      $("options").querySelector("input").focus(); return;
+    }
+    index++; render();
+  });
+  $("skip").addEventListener("click", () => { if (stillOpen() && index < questions.length - 1) { index++; render(); } });
+  $("back").addEventListener("click", () => { if (stillOpen() && index > 0) { index--; render(); } });
+  $("retake").addEventListener("click", () => {
+    $("results").hidden = true; $("ready").hidden = false; $("start").focus();
+  });
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) tick(); });
+})();
 </script>
 </body>
 </html>
