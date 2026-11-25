@@ -1,0 +1,67 @@
+#pd-tabs{display:grid;grid-template-columns:1.18fr 1fr 1fr;gap:4px;border-bottom:1px solid #aebdb0}
+#pd-tabs a{display:flex;gap:.55rem;align-items:center;min-width:0;min-height:52px;padding:10px 14px 8px;border-bottom:3px solid transparent;color:var(--ink);font-size:.94rem;font-weight:750;text-decoration:none;line-height:1.25}
+#pd-tabs small{color:var(--quiet);font-variant-numeric:tabular-nums}
+#pd-tabs a:hover{background:var(--white)}
+#pd-tabs [aria-selected=true]{border-color:var(--ink);background:var(--wash)}
+.pd-panel{padding-top:22px;min-width:0;scroll-margin-top:90px}
+.pd-layout{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);align-items:start;gap:clamp(18px,5vw,64px)}
+.pd-lead h3,.pd-run-title,#pd-paper-sheet h3,#pd-paper-key h3{font:750 clamp(1.35rem,3vw,1.75rem)/1.2 var(--sans);color:var(--ink);margin:0}
+.pd-lead p:not(.eyebrow){margin:10px 0}
+.pd-lead a{display:inline-flex;align-items:center;min-height:44px}
+.pd-config .actions,.pd-toolrow{margin-top:14px}
+.pd-format small{display:block;font-size:.83rem;color:var(--quiet);line-height:1.4;margin-top:2px}
+.pd-help{font-size:.88rem;color:var(--quiet);margin:12px 0}
+.pd-help:last-child{margin-bottom:0}
+.pd-config label:not(.choice),.pd-toolrow label{display:block;font-weight:700;color:var(--ink)}
+.pd-config select,.pd-toolrow input{display:block;min-height:44px;color:var(--ink);background:var(--white);border:1px solid #84978a;border-radius:5px;padding:6px 9px;font:inherit;font-weight:500;margin-top:5px}
+.pd-config select{width:100%;min-width:0}
+.pd-fields{display:grid;grid-template-columns:1.5fr 1fr;gap:12px}
+.pd-fields label{min-width:0}
+.pd-toolrow,.pd-run-nav{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
+.pd-toolrow input{width:7.5rem}
+.pd-run-nav{margin-top:16px}
+.pd-run-title{margin-bottom:14px}
+.pd-run .math-meta,.pd-breakdown dd{font-variant-numeric:tabular-nums}
+.pd-run fieldset{margin-top:12px;overflow-wrap:anywhere}
+.pd-confirm{border:1px solid #aebdb0;background:var(--wash);border-radius:5px;padding:12px 15px;margin-top:14px}
+.pd-confirm p{margin:0 0 10px}
+.pd-breakdown{margin:18px 0;padding:12px 0;border-block:1px solid var(--rule)}
+.pd-breakdown div{display:flex;gap:12px;justify-content:space-between;padding:4px 0}
+.pd-breakdown dd{font-weight:750;white-space:nowrap;margin:0}
+.pd-result-slot .review li{overflow-wrap:anywhere}
+.pd-paper-actions{margin:20px 0 12px;justify-content:flex-end}
+.pd-paper-actions p{margin:0 auto 0 0;font-weight:700}
+.pd-paper-actions label{display:inline-flex;align-items:center;min-height:44px;gap:7px;font-size:.9rem}
+.pd-paper-actions input{width:19px;height:19px;accent-color:var(--ink)}
+#pd-paper-sheet{overflow-wrap:anywhere}
+#pd-paper-questions,#pd-paper-answers{padding-inline-start:1.5rem}
+#pd-paper-questions>li{border-top:1px solid var(--rule);margin:12px 0;padding:11px 0 0}
+#pd-paper-questions ol{padding-inline-start:1.5rem;margin:5px 0}
+#pd-paper-key{margin-top:12px}
+#pd-paper-key summary{display:flex;justify-content:space-between}
+#pd-paper-key .page-copy{padding-top:16px}
+#pd-paper-answers li{margin-block:.3em}
+@media(max-width:690px){
+  .pd-layout{grid-template-columns:minmax(0,1fr);gap:14px}
+  #pd-tabs a{display:block;padding-inline:7px;font-size:.83rem}
+  #pd-tabs small{display:block;margin-bottom:4px}
+}
+@media(max-width:430px){
+  .mast nav{flex-wrap:wrap}
+  .pd-fields{grid-template-columns:minmax(0,1fr)}
+  .pd-paper-actions{justify-content:flex-start}
+}
+@media print{
+  body.pd-printing{background:white;color:#111;font:11pt/1.35 system-ui,sans-serif}
+  body.pd-printing>:not(main),body.pd-printing main>:not(#practice-dashboard),
+  body.pd-printing #practice-dashboard>:not(#random-test-paper),
+  body.pd-printing #random-test-paper>:not(#pd-paper-result),
+  body.pd-printing .pd-paper-actions,body.pd-printing #pd-paper-key summary,
+  body.pd-printing:not(.pd-with-key) #pd-paper-key{display:none!important}
+  body.pd-printing .wrap{width:100%;max-width:none;margin:0}
+  body.pd-printing .section,body.pd-printing .pd-panel,body.pd-printing #pd-paper-sheet{border:0;padding:0}
+  body.pd-printing #pd-paper-sheet h3{font-size:20pt}
+  body.pd-printing #pd-paper-questions>li{break-inside:avoid;margin:5pt 0;padding-top:5pt}
+  body.pd-printing #pd-paper-key{break-before:page;border:0;margin:0}
+  body.pd-printing #pd-paper-key .page-copy{padding:0}
+}

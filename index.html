@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Study all four PTCE domains and practice with 1,000 original questions across a mixed quiz and a timed pharmacy math drill.">
+<meta name="description" content="Study all four PTCE domains with 1,000 practice questions, a full-length mock exam, focused domain sets, and printable test papers.">
 <meta name="theme-color" content="#213d34">
 <title>PTCE Study Guide &amp; Practice Quiz</title>
 <style>
@@ -112,26 +112,85 @@
   @media(max-width:470px){.mast .wrap{flex-wrap:wrap;column-gap:12px;row-gap:0}.mast nav{gap:10px}.mast nav a{font-size:.82rem}}
   @media(max-width:360px){.wrap{width:calc(100% - 24px)}.mast .wrap,nav{column-gap:8px}.mast nav a{font-size:.79rem}}
 </style>
+<link rel="stylesheet" href="./practice-dashboard.css?v=1">
 </head>
 <body id="top">
 <a class="skip" href="#main">Skip to content</a>
 <header class="mast"><div class="wrap">
   <a href="#top" class="brand">PTCE Study Guide</a>
-  <nav aria-label="Main navigation"><a href="#study">Guide</a><a href="#quiz">Quiz</a><a href="#math-drill">Math drill</a><a href="#resources">Sources</a></nav>
+  <nav aria-label="Main navigation"><a href="#practice-dashboard">Dashboard</a><a href="#study">Guide</a><a href="#quiz">Quiz</a><a href="#math-drill">Math drill</a><a href="#resources">Sources</a></nav>
 </div></header>
 <main class="wrap" id="main">
   <header class="hero">
     <div class="hero-copy">
       <p class="eyebrow">Pharmacy technician exam prep · 2026</p>
       <h1>PTCE study<br> &amp; practice</h1>
-      <p class="intro">Review 15 study pages and practice with 1,000 question items across a mixed quiz and timed pharmacy math drill.</p>
-      <div class="actions"><a class="button" href="#quiz">Start practice quiz</a><a class="button secondary" href="#study">Read study guide</a></div>
+      <p class="intro">Review 15 study pages, then use the 1,000-question bank to take a mock exam, focus on a domain, or print a test paper.</p>
+      <div class="actions"><a class="button" href="#practice-dashboard">Open practice dashboard</a><a class="button secondary" href="#study">Read study guide</a></div>
     </div>
     <aside class="cover" aria-labelledby="exam-coverage">
       <p id="exam-coverage">Exam coverage</p>
       <ul><li><span>Medications</span><strong>35%</strong></li><li><span>Federal Requirements</span><strong>18.75%</strong></li><li><span>Patient Safety &amp; Quality Assurance</span><strong>23.75%</strong></li><li><span>Order Entry &amp; Processing</span><strong>22.5%</strong></li></ul>
     </aside>
   </header>
+  <section class="section" id="practice-dashboard" aria-labelledby="pd-heading">
+    <p class="eyebrow">1,000 questions · four domains</p>
+    <h2 id="pd-heading">Practice dashboard</h2>
+    <p class="section-intro">Simulate exam day, focus on one domain, or generate a paper to work through offline.</p>
+    <div id="pd-tabs" role="tablist" aria-label="Practice modes">
+      <a id="pd-tab-mock" role="tab" aria-selected="true" aria-controls="mock-exam" href="#mock-exam"><small>01</small> Full-Length Mock Exam</a>
+      <a id="pd-tab-domain" role="tab" aria-selected="false" aria-controls="practice-by-domain" href="#practice-by-domain" tabindex="-1"><small>02</small> Practice by Domain</a>
+      <a id="pd-tab-paper" role="tab" aria-selected="false" aria-controls="random-test-paper" href="#random-test-paper" tabindex="-1"><small>03</small> Random Test Paper</a>
+    </div>
+    <section class="pd-panel" id="mock-exam" role="tabpanel" aria-labelledby="pd-tab-mock" tabindex="0">
+      <div class="pd-layout" data-setup="mock">
+        <div class="pd-lead"><p class="eyebrow">Simulate exam day</p><h3>Take a full-length mock</h3><p>Practice under exam conditions or work through the entire bank at your own pace. Scores are for practice, not a predicted PTCE scaled score.</p><a href="https://ptcb.org/credentials/certification/certified-pharmacy-technician/" target="_blank" rel="noopener noreferrer">Official PTCE format</a></div>
+        <form class="quiz-card pd-config" id="pd-mock-form">
+          <fieldset><legend>Choose a format</legend>
+            <label class="choice pd-format"><input type="radio" name="pd-format" value="timed" checked><span><strong>Timed simulation</strong><small>90 questions · 110 minutes · all four domains</small></span></label>
+            <label class="choice pd-format"><input type="radio" name="pd-format" value="all"><span><strong>All 1,000 questions</strong><small>Untimed · includes the full calculation bank</small></span></label>
+          </fieldset>
+          <div class="actions"><button class="button" type="submit">Start mock exam</button></div>
+          <p class="pd-help">Progress stays in this browser tab if you refresh. The timed mock keeps running while you’re away.</p>
+        </form>
+      </div>
+      <div data-run="mock" hidden></div>
+    </section>
+    <section class="pd-panel" id="practice-by-domain" role="tabpanel" aria-labelledby="pd-tab-domain" tabindex="0" hidden>
+      <div class="pd-layout" data-setup="domain">
+        <div class="pd-lead"><p class="eyebrow">Target your review</p><h3>Practice one domain</h3><p>Choose a domain and the size of your set. Practice is untimed, with explanations and guide links after submission.</p></div>
+        <form class="quiz-card pd-config" id="pd-domain-form">
+          <div class="pd-fields">
+            <label for="pd-domain-choice">Exam domain<select id="pd-domain-choice"></select></label>
+            <label for="pd-domain-size">Questions<select id="pd-domain-size"><option>10</option><option>25</option><option>50</option><option value="all">All in this domain</option></select></label>
+          </div>
+          <p class="pd-help" id="pd-domain-count" aria-live="polite"></p>
+          <button class="button" type="submit">Start domain practice</button>
+        </form>
+      </div>
+      <div data-run="domain" hidden></div>
+    </section>
+    <section class="pd-panel" id="random-test-paper" role="tabpanel" aria-labelledby="pd-tab-paper" tabindex="0" hidden>
+      <div class="pd-layout">
+        <div class="pd-lead"><p class="eyebrow">Work offline</p><h3>Make a test paper</h3><p>Generate a fresh set across all four domains. Print the questions on their own, or include the answer key on a separate page.</p></div>
+        <form class="quiz-card pd-config" id="pd-paper-form">
+          <label for="pd-paper-size">Questions<select id="pd-paper-size"><option>10</option><option selected>25</option><option>50</option><option>90</option></select></label>
+          <div class="actions"><button class="button" type="submit">Generate test paper</button></div>
+        </form>
+      </div>
+      <div id="pd-paper-result" hidden>
+        <div class="pd-paper-actions actions"><p id="pd-paper-status" role="status"></p><label><input id="pd-print-key" type="checkbox"> Include answer key when printing</label><button id="pd-print" class="button secondary" type="button">Print / save PDF</button></div>
+        <article class="quiz-card" id="pd-paper-sheet">
+          <h3 id="pd-paper-title" tabindex="-1">PTCE Practice Test Paper</h3>
+          <p class="pd-help">Name: ____________________ &nbsp; Date: __________</p>
+          <p>Choose the best answer for each question.</p>
+          <ol id="pd-paper-questions"></ol>
+        </article>
+        <details id="pd-paper-key"><summary>Show answer key</summary><div class="page-copy"><h3>Answer key</h3><ol id="pd-paper-answers"></ol></div></details>
+      </div>
+    </section>
+    <noscript><p>Enable JavaScript to use the practice dashboard.</p></noscript>
+  </section>
   <section class="section quiz" id="quiz" aria-labelledby="quiz-title">
     <p class="eyebrow">12 questions · mixed practice</p>
     <h2 id="quiz-title">Practice quiz</h2>
@@ -149,7 +208,10 @@
         <section class="results" id="results" aria-labelledby="score" hidden>
           <p class="eyebrow">Practice results</p><h3 id="score" tabindex="-1"></h3>
           <p>This is a practice score, not a predicted PTCE scaled score.</p>
-          <button class="button" id="reset" type="button">Retake quiz</button>
+          <div class="actions">
+            <button class="button" id="reset" type="button">Start a new set</button>
+            <button class="button secondary" id="quiz-replay" type="button">Retake same questions</button>
+          </div>
           <ol class="review" id="review"></ol>
         </section>
         <noscript><p>Enable JavaScript to take the interactive quiz. You can still read the guide and the printable questions on page 15.</p></noscript>
@@ -165,6 +227,7 @@
       <div>
         <div class="quiz-card" id="math-ready">
           <p class="math-help"><strong>10:00</strong> to complete all 10 questions. The timer starts only when you press Start timed drill.</p>
+          <p class="math-help" id="math-replay-note" hidden>You’ll retake the same questions in the same order.</p>
           <button class="button" type="button" id="math-start">Start timed drill</button>
         </div>
         <form class="quiz-card" id="math-form" hidden>
@@ -180,7 +243,10 @@
         <section class="results" id="math-results" aria-labelledby="math-score" hidden>
           <p class="eyebrow">Math drill results</p><h3 id="math-score" tabindex="-1"></h3>
           <p id="math-status"></p>
-          <button class="button" id="math-retake" type="button">Retake math drill</button>
+          <div class="actions">
+            <button class="button" id="math-retake" type="button">Start a new set</button>
+            <button class="button secondary" id="math-replay" type="button">Retake same questions</button>
+          </div>
           <ol class="review" id="math-review"></ol>
         </section>
         <noscript><p>Enable JavaScript to take the timed math drill. Worked examples are available in study pages 11–13 without JavaScript.</p></noscript>
@@ -1011,7 +1077,7 @@
 <footer class="wrap" id="resources">
   <p><strong>Study references:</strong> <a href="https://myaccount.ptcb.org/lib24watch/files/download/1489" target="_blank" rel="noopener noreferrer">PTCB exam outline</a> · <a href="https://ptcb.org/official-ptcb-practice-tools/" target="_blank" rel="noopener noreferrer">Official practice tools</a> · <a href="https://dailymed.nlm.nih.gov/dailymed/" target="_blank" rel="noopener noreferrer">DailyMed</a></p>
   <p><strong>Question-bank references:</strong> <a href="https://www.ptcb.org/lib24watch/files/download/1490" target="_blank" rel="noopener noreferrer">2026 PTCB knowledge reference</a> · <a href="https://www.ecfr.gov/current/title-21/part-1306" target="_blank" rel="noopener noreferrer">Federal controlled-prescription rules</a> · <a href="https://www.fda.gov/drugs/drug-supply-chain-security-act-dscsa/pharmacists-utilize-dscsa-requirements-protect-your-patients" target="_blank" rel="noopener noreferrer">FDA dispenser DSCSA guide</a> · <a href="https://www.ismp.org/system/files/resources/2024-04/ISMP_ErrorProneAbbreviation_List.pdf" target="_blank" rel="noopener noreferrer">ISMP safety abbreviations</a>.</p>
-  <p>Independent study material. The original question wording includes fact-based prompts and numerical calculation variants. These are not official PTCB exam items. The quiz does not send or store answers. <a href="#top">Back to top</a></p>
+  <p>Independent study material. The original question wording includes fact-based prompts and numerical calculation variants. These are not official PTCB exam items. No answers are sent to a server. Mock and domain progress are kept in the current browser tab. <a href="#top">Back to top</a></p>
 </footer>
 <script src="./question-bank.js?v=1"></script>
 <script>
@@ -1078,7 +1144,8 @@ const mixedBank = [
   ["Order entry",14,"An expired bottle is found on the dispensing shelf. What is the appropriate action?",["Restock it if it is unopened","Change the date on the label","Dispense it if the patient agrees","Segregate it as nondispensable and follow site policy"],3,"Expired stock should be removed from dispensing inventory and handled through the proper return or disposal process."],
   ["Pharmacy math",12,"An inhaler has 120 usable actuations. Directions say inhale one puff twice daily. What is the days’ supply?",["30 days","60 days","90 days","120 days"],1,"The patient uses two actuations per day. 120 ÷ 2 = 60 days."]
 ];
-const drawMixed = makeQuestionDraw(PTCE_BANK.buildMixed(mixedBank), [
+const dashboardMixed = PTCE_BANK.buildMixed(mixedBank);
+const drawMixed = makeQuestionDraw(dashboardMixed, [
   [4, q => q[0] === "Medications"],
   [2, q => q[0] === "Federal rules"],
   [3, q => q[0] === "Patient safety"],
@@ -1145,10 +1212,13 @@ form.addEventListener("submit", e => {
   current++; renderQuestion(true);
 });
 el("previous").addEventListener("click", () => { if (current > 0) { current--; renderQuestion(true); } });
-el("reset").addEventListener("click", () => {
-  items = drawMixed(); current = 0; answers = Array(items.length).fill(null);
+function restartMixed(useSameSet) {
+  if (!useSameSet) items = drawMixed();
+  current = 0; answers = Array(items.length).fill(null);
   results.hidden = true; form.hidden = false; renderQuestion(true);
-});
+}
+el("reset").addEventListener("click", () => restartMixed(false));
+el("quiz-replay").addEventListener("click", () => restartMixed(true));
 function openLinkedPage() {
   const id = location.hash.slice(1);
   if (!/^page-\d\d$/.test(id)) return;
@@ -1193,7 +1263,8 @@ openLinkedPage();
     ["Patch days’ supply",12,"One patch is applied every 72 hours. How many days do 8 patches cover?",["8 days","16 days","24 days","48 days"],2,"72 hours ÷ 24 = 3 days per patch. 8 × 3 = 24 days."],
     ["Refrigerator temperature",11,"Convert a reading of 46.4°F to degrees Celsius.",["4°C","6°C","8°C","10°C"],2,"°C = (°F − 32) × 5/9. (46.4 − 32) × 5/9 = 8°C."]
   ];
-  const drawMath = makeQuestionDraw(PTCE_BANK.buildMath(mathBank), [
+  const dashboardMath = PTCE_BANK.buildMath(mathBank);
+  const drawMath = makeQuestionDraw(dashboardMath, [
     [2, q => q[1] === 11],
     [3, q => q[1] === 12],
     [3, q => q[1] === 13 && !/rate|time/i.test(q[0])],
@@ -1201,7 +1272,7 @@ openLinkedPage();
   ]);
   const $ = id => document.getElementById("math-" + id);
   const duration = 10 * 60 * 1000;
-  let questions = [], index = 0, answers = [], deadline = 0, timer = 0, warned = false;
+  let questions = [], index = 0, answers = [], deadline = 0, timer = 0, warned = false, replay = false;
   function text(tag, value, className) {
     const node = document.createElement(tag);
     node.textContent = value;
@@ -1267,7 +1338,8 @@ openLinkedPage();
     return true;
   }
   $("start").addEventListener("click", () => {
-    questions = drawMath(); index = 0; answers = Array(questions.length).fill(null); warned = false;
+    if (!replay) questions = drawMath();
+    index = 0; answers = Array(questions.length).fill(null); warned = false;
     deadline = Date.now() + duration;
     $("ready").hidden = true; $("form").hidden = false;
     render(); updateProgress(); tick(); timer = setInterval(tick, 250);
@@ -1289,11 +1361,19 @@ openLinkedPage();
   });
   $("skip").addEventListener("click", () => { if (stillOpen() && index < questions.length - 1) { index++; render(); } });
   $("back").addEventListener("click", () => { if (stillOpen() && index > 0) { index--; render(); } });
-  $("retake").addEventListener("click", () => {
+  function readyForRetake(useSameSet) {
+    replay = useSameSet;
+    $("replay-note").hidden = !replay;
+    $("time").textContent = "10:00";
     $("results").hidden = true; $("ready").hidden = false; $("start").focus();
-  });
+  }
+  $("retake").addEventListener("click", () => readyForRetake(false));
+  $("replay").addEventListener("click", () => readyForRetake(true));
   document.addEventListener("visibilitychange", () => { if (!document.hidden) tick(); });
+  const data = Object.freeze({mixed:dashboardMixed,math:dashboardMath});
+  window.PTCE_DASHBOARD_DATA = data;
 })();
 </script>
+<script src="./practice-dashboard.js?v=1" defer></script>
 </body>
 </html>
